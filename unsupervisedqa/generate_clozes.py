@@ -70,26 +70,52 @@ def get_cloze_id(paragraph_text, sentence_text, answer_text):
     return hashlib.sha1(rep.encode()).hexdigest()
 
 
+# def generate_clozes_from_paragraph(paragraph, answer_generator):
+#     clozes = []
+#     para_doc = nlp(paragraph.text)
+#     for sentence in para_doc.sents:
+#         is_good = is_appropriate_cloze(sentence.text)
+#         if is_good:
+#             answers = answer_generator(sentence)
+#             for answer_text, answer_start, answer_type in answers:
+#                 if is_appropriate_answer(answer_text):
+#                     yield Cloze(
+#                         cloze_id=get_cloze_id(paragraph.text, sentence.text, answer_text),
+#                         paragraph=paragraph,
+#                         source_text=sentence.text,
+#                         source_start=sentence.start_char,
+#                         cloze_text=mask_answer(sentence.text, answer_text, answer_start, answer_type),
+#                         answer_text=answer_text,
+#                         answer_start=answer_start,
+#                         constituency_parse=None,
+#                         root_label=None,
+#                         answer_type=answer_type,
+#                         question_text=None
+#                     )
+#     return clozes
+
 def generate_clozes_from_paragraph(paragraph, answer_generator):
     clozes = []
-    para_doc = nlp(paragraph.text)
-    for sentence in para_doc.sents:
-        is_good = is_appropriate_cloze(sentence.text)
-        if is_good:
-            answers = answer_generator(sentence)
-            for answer_text, answer_start, answer_type in answers:
-                if is_appropriate_answer(answer_text):
-                    yield Cloze(
-                        cloze_id=get_cloze_id(paragraph.text, sentence.text, answer_text),
-                        paragraph=paragraph,
-                        source_text=sentence.text,
-                        source_start=sentence.start_char,
-                        cloze_text=mask_answer(sentence.text, answer_text, answer_start, answer_type),
-                        answer_text=answer_text,
-                        answer_start=answer_start,
-                        constituency_parse=None,
-                        root_label=None,
-                        answer_type=answer_type,
-                        question_text=None
-                    )
+    sentence = paragraph.text
+    # para_doc = nlp(paragraph.text)
+    # for sentence in para_doc.sents:
+        # is_good = is_appropriate_cloze(sentence.text)
+        # if is_good:
+    answers = get_answertext_wordvector(sentence)
+            # answers = answer_generator(sentence)
+    for answer_text, answer_start, answer_type in answers:
+        # if is_appropriate_answer(answer_text):
+        yield Cloze(
+            cloze_id=get_cloze_id(paragraph.text, sentence, answer_text),
+            paragraph=paragraph,
+            source_text=sentence,
+            source_start=0, # sentence.start_char,
+            cloze_text=mask_answer(sentence, answer_text, answer_start, answer_type),
+            answer_text=answer_text,
+            answer_start=answer_start,
+            constituency_parse=None,
+            root_label=None,
+            answer_type=answer_type,
+            question_text=None
+        )
     return clozes
