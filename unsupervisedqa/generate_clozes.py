@@ -16,7 +16,7 @@ from .configs import MIN_ANSWER_CHAR_LEN, MAX_ANSWER_CHAR_LEN,\
     MAX_PARAGRAPH_WORD_LEN_THRESHOLD, MAX_QUESTION_CHAR_LEN_THRESHOLD, MAX_QUESTION_WORD_LEN_THRESHOLD, \
     NOUNPHRASE_LABEL, SPACY_MODEL
 from .data_classes import Cloze
-
+from .spec_ner import get_answertext_wordvector
 nlp = spacy.load(SPACY_MODEL)
 
 

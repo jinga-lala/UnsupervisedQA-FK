@@ -107,6 +107,7 @@ for i,j in combined:
     if len(j) > 20 :
       long_combined.append((i,j))
   except:
+      pass
     # print(i)
 # print(len(long_combined))
 # print(long_combined[:10])
@@ -202,6 +203,7 @@ def get_answertext_wordvector(ans):
   top3_specs =  np.argsort(spec_emb@ans_emb, axis=0)[-3:][::-1].flatten()
   top3_specs = [spec_list[i] for i in top3_specs]
 
+  entities = []
   entities_type = []
   for j in top3_specs:
 
@@ -217,7 +219,7 @@ def get_answertext_wordvector(ans):
         e += " "+split_ans[k]
       else:
         if e!="":
-          if len(df.attributetype[df.attributename==j].tolist()) !=0
+          if len(df.attributetype[df.attributename==j].tolist()) !=0:
             entities_type.append(df.attributetype[df.attributename==j].tolist()[0])
           else:
             entities_type.append("NOUN") #DEFAULT TYPE
@@ -226,7 +228,7 @@ def get_answertext_wordvector(ans):
       prev = k
 
     if e != "":
-      if len(df.attributetype[df.attributename==j].tolist()) !=0
+      if len(df.attributetype[df.attributename==j].tolist()) !=0:
         entities_type.append(df.attributetype[df.attributename==j].tolist()[0])
       else:
         entities_type.append("NOUN") #DEFAULT TYPE
@@ -234,7 +236,7 @@ def get_answertext_wordvector(ans):
 
   entities_start = [ans.find(e) for e in entities ]
 
-  return (entities, entities_start, entities_type)
+  return [(a,b,c) for a,b,c in zip(entities, entities_start, entities_type)]
   # print(ans, entities)
 
   # f.write(spec_list[np.argmax(spec_emb@ans_emb)]+" ; "+' '.join(ans)+" ; "+q+"\n")
